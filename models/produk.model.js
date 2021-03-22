@@ -10,4 +10,4 @@ const ProdukSchema = mongoose.Schema({
   pemilik: { type: ObjectId, ref: "Pelanggan" },
 });
 
-module.exports = mongoose.model("Produk", ProdukSchema, { timestamps: true });
+module.exports = mongoose.model("Produk", ProdukSchema);

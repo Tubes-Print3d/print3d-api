@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 const PenggunaSchema = mongoose.Schema({
   nama: { type: String, required: true },
@@ -7,9 +7,9 @@ const PenggunaSchema = mongoose.Schema({
   kontak: [{ type: String }],
   statePengguna: {
     type: String,
-    enum: ['pending', 'verified', 'accepted', 'banned'],
-    default: 'pending'
-  }
-})
+    enum: ["pending", "verified", "accepted", "banned"],
+    default: "pending",
+  },
+});
 
-module.exports = mongoose.model('Pengguna', PenggunaSchema)
+module.exports = mongoose.model("Pengguna", PenggunaSchema);
