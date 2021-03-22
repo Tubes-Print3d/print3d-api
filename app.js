@@ -14,9 +14,9 @@ app.use(
       extended: true
     })
   );
-  
+
   app.use(bodyParser.json()); // to support JSON-encoded bodies
-  
+
 // Requiring Routes
 
 const UsersRoutes = require('./routes/users.routes');
@@ -32,7 +32,7 @@ fs.readdirSync(__dirname + "/models").forEach(function(file) {
     require(__dirname + "/models/" + file);
 });
 
-// in case you want to serve images 
+// in case you want to serve images
 app.use(express.static("public"));
 
 app.get('/',  function (req, res) {
@@ -40,7 +40,7 @@ app.get('/',  function (req, res) {
     message: 'Express backend server'});
 });
 
-app.set('port', (3000));
+app.set('port', (7002));
 
 app.use(accessControls);
 app.use(cors());
