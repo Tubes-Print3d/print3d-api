@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const passportLocalMongoose = require("passport-local-mongoose");
 
 const PenggunaSchema = mongoose.Schema({
   nama: { type: String, required: true },
@@ -11,5 +12,7 @@ const PenggunaSchema = mongoose.Schema({
     default: "pending",
   },
 });
+
+PenggunaSchema.plugin(passportLocalMongoose, { usernameField: "email" });
 
 module.exports = mongoose.model("Pengguna", PenggunaSchema);
