@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 
 // membaca env variabel
 const SALT = Number(process.env.SALT);
-const API_KEY = process.env.API_KEY;
+const { JWT_KEY } = process.env;
 
 const register = (Pengguna) => async (data) => {
   // generate password yang sudah di hash
@@ -28,7 +28,7 @@ const register = (Pengguna) => async (data) => {
       // token ini akan expired dalam waktu 60*15 detik = 15 menit
       exp: Math.floor(Date.now() / 1000) + 60 * 15,
     },
-    API_KEY
+    JWT_KEY
   );
 
   return token;

@@ -1,6 +1,6 @@
 {
-  "name": "nodejs-express-mongoose-starter",
-  "version": "1.0.0",
+  "name": "print3d-api",
+  "version": "0.1.0",
   "description": "",
   "main": "app.js",
   "scripts": {
@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "dotenv": "^6.0.0",
-    "eslint-config-google": "^0.9.1"
+    "eslint-config-google": "^0.9.1",
+    "nodemon": "2.0.7"
   }
 }
