@@ -1,7 +1,6 @@
-  module.exports = (req, res, next) => {
-    const error = {
-      status: 404,
-      message: 'This URL does not exists'
-    }
-    next(error);
+module.exports = (req, res, next) => {
+  next({
+    status: 404,
+    error: "This URL does not exists",
+  });
 };

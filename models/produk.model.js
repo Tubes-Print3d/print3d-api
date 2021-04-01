@@ -5,7 +5,7 @@ const ProdukSchema = mongoose.Schema({
   nama: { type: String, required: true },
   fileModel: { type: ObjectId },
   previewImage: { type: ObjectId },
-  visibility: { type: Boolean, default: false },
+  visibility: { type: Boolean, default: true },
   royalty: { type: Number, default: 0 },
   pemilik: { type: ObjectId, ref: "Pelanggan" },
 });
