@@ -13,5 +13,9 @@ const register = [
   body("password").isStrongPassword(),
   body("kontak").optional().isArray(),
 ];
+const login = [
+  body("email").isEmail(), 
+  body("password").isStrongPassword()
+];
 
-module.exports = wrap({ register });
+module.exports = wrap({ register, login });
