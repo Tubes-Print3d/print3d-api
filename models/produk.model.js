@@ -7,7 +7,7 @@ const ProdukSchema = mongoose.Schema({
   previewImage: { type: ObjectId },
   visibility: { type: Boolean, default: true },
   royalty: { type: Number, default: 0 },
-  pemilik: { type: ObjectId, ref: "Pelanggan" },
+  pemilik: { type: ObjectId, ref: "Pengguna" },
 });
 
 module.exports = mongoose.model("Produk", ProdukSchema);

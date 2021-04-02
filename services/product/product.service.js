@@ -7,7 +7,7 @@ const addProduct = (Produk) => async (data) => {
   }
 };
 const listProduct = (Produk) => async (queries = {}) => {
-  const products = await Produk.find(queries);
+  const products = await Produk.find(queries).populate('pemilik', 'nama');
   return products;
 };
 module.exports = (model) => ({
