@@ -33,8 +33,8 @@ const register = (Pengguna) => async (data) => {
 
   // generate token untuk pengguna baru tersebut
   const token = createToken(penggunaBaru);
-
-  return token;
+  const profil = await getProfile(pengguna._id);
+  return { ...profil, token };
 };
 const login = (Pengguna) => async (data) => {
   const pengguna = await Pengguna.findOne(
@@ -48,9 +48,13 @@ const login = (Pengguna) => async (data) => {
   if (!match) {
     return Promise.reject("Wrong email or password");
   }
-  return createToken(pengguna);
+  const profil = await getProfile(pengguna._id);
+  return { ...profil, token: createToken(pengguna) };
 };
-
+const getProfile = (Pengguna) => async (idPengguna) => {
+  const pengguna = await Pengguna.findById(idPengguna, "-password").exec();
+  return pengguna;
+};
 module.exports = (model) => ({
   register: register(model),
   login: login(model),
