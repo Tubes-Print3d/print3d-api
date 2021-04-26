@@ -55,7 +55,6 @@ const getProfile = (Pengguna) => async (idPengguna) => {
   const pengguna = await Pengguna.findById(idPengguna, "-password").exec();
   return pengguna;
 };
-
 module.exports = (model) => ({
   register: register(model),
   login: login(model),
