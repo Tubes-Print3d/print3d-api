@@ -1,9 +1,21 @@
+const { StatusCodes } = require("http-status-codes");
+
 const sendResponse = (res, status, options = {}) => {
   res.status(status).send({ status, ...options });
 };
 
-const responser = (res, payload, status = 200, options = {}) => {
+const responser = (
+  res,
+  payload = null,
+  status = StatusCodes.OK,
+  options = {}
+) => {
   sendResponse(res, status, { payload, ...options });
 };
 
-module.exports = { sendResponse, responser };
+const ResError = (error, status = StatusCodes.BAD_REQUEST) => ({
+  status,
+  error,
+});
+
+module.exports = { sendResponse, responser, ResError };
