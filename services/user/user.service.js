@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 // membaca env variabel
 const SALT = Number(process.env.SALT);
 const { JWT_KEY } = process.env;
+
 const createToken = (pengguna) => {
   const token = jwt.sign(
     {
@@ -16,6 +17,7 @@ const createToken = (pengguna) => {
   );
   return token;
 };
+
 const register = (Pengguna) => async (data) => {
   // generate password yang sudah di hash
   const hashedPassword = await bcrypt.hash(data.password, SALT).catch((err) => {
@@ -33,9 +35,10 @@ const register = (Pengguna) => async (data) => {
 
   // generate token untuk pengguna baru tersebut
   const token = createToken(penggunaBaru);
-  const profil = await getProfile(pengguna._id);
+  const profil = await getProfile(Pengguna)(pengguna._id);
   return { ...profil, token };
 };
+
 const login = (Pengguna) => async (data) => {
   const pengguna = await Pengguna.findOne(
     { email: data.email },
@@ -48,14 +51,17 @@ const login = (Pengguna) => async (data) => {
   if (!match) {
     return Promise.reject("Wrong email or password");
   }
-  const profil = await getProfile(pengguna._id);
+  const profil = await getProfile(Pengguna)(pengguna._id);
   return { ...profil, token: createToken(pengguna) };
 };
+
 const getProfile = (Pengguna) => async (idPengguna) => {
   const pengguna = await Pengguna.findById(idPengguna, "-password").exec();
-  return pengguna;
+  return pengguna.toObject();
 };
+
 module.exports = (model) => ({
   register: register(model),
   login: login(model),
+  getProfile: getProfile(model),
 });
