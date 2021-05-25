@@ -1,5 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { StatusCodes } = require("http-status-codes");
+const { ResError } = require("../../utils/responser");
 
 // membaca env variabel
 const SALT = Number(process.env.SALT);
@@ -63,8 +65,23 @@ const getProfile = (Pengguna) => async (idPengguna) => {
   return pengguna.toObject();
 };
 
+const addRole = (Pengguna) => async (id, newRole) => {
+  const pengguna = await Pengguna.findById(id, "roles").exec();
+  if (pengguna.roles === undefined || !Array.isArray(pengguna.roles)) {
+    pengguna.roles = [];
+  }
+  if (pengguna.roles.includes(newRole)) {
+    return Promise.reject(
+      ResError(`User is already a ${newRole}`, StatusCodes.CONFLICT)
+    );
+  }
+  pengguna.roles.push(newRole);
+  await pengguna.save();
+};
+
 module.exports = (model) => ({
   register: register(model),
   login: login(model),
   getProfile: getProfile(model),
+  addRole: addRole(model),
 });

@@ -42,7 +42,10 @@ const roleCheck = (roles) => async (req, res, next) => {
     next(error);
   }
 };
-module.exports = {
+
+const auth = {
   verify,
   roleCheck,
 };
+
+module.exports = auth;

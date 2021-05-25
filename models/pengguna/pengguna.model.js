@@ -17,11 +17,13 @@ const PenggunaSchema = mongoose.Schema({
     enum: ["pending", "verified", "accepted", "banned"],
     default: "pending",
   },
-  roles: [{ type: String, enum: ["pencetak", "desainer"] }],
+  roles: [{ type: String, enum: ["pencetak", "desainer"] }], // roles dasar adalah pelanggan
+  listAlamat: [{ type: AlamatSchema }],
+
   // Field Pelanggan
   keranjang: [{ type: ObjectId, ref: "Produk" }],
-  listAlamat: [{ type: AlamatSchema }],
-  alamatDefault: { type: ObjectId },
+  alamatDefault: { type: ObjectId }, // id dari salah satu alamat di dalam list alamat
+
   //Field Pencetak
   lokasiPencetak: {
     type: ObjectId,

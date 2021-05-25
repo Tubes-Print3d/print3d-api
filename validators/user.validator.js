@@ -22,9 +22,23 @@ const register = [
     return true;
   }),
 ];
+
 const login = [
   body("email").isEmail(),
   body("password").isStrongPassword({ minSymbols: 0 }),
 ];
 
-module.exports = wrap({ register, login });
+const addRole = [
+  body("newRoles")
+    .exists()
+    .isIn(["desainer", "pencetak"])
+    .bail() // tidak perlu lanjut jika roles bukan salah satu diatas
+    .custom((role, { req }) => {
+      if (role === "pencetak") {
+        // TODO: harus ada field alamat
+        return true;
+      }
+    }),
+];
+
+module.exports = wrap({ register, login, addRole });
