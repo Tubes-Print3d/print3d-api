@@ -14,6 +14,13 @@ const register = [
     .isStrongPassword({ minSymbols: 0 })
     .withMessage("weak password"),
   body("kontak").optional().isArray(),
+  body("roles").custom((roles, { req }) => {
+    const validators = [];
+    if (roles.includes("pencetak")) {
+      if (!req.body.alamat) throw new Error("Field alamat dibutuhkan");
+    }
+    return true;
+  }),
 ];
 const login = [
   body("email").isEmail(),
