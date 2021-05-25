@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { JWT_KEY } = process.env;
-
+const Pengguna = require("../models/pengguna/pengguna.model");
 const verify = (req, res, next) => {
   try {
     if (!req.headers.authorization) {
@@ -11,12 +11,38 @@ const verify = (req, res, next) => {
     res.locals.auth = payload.data;
     next();
   } catch (error) {
-    if (error === 'missing authorization header') {
-      next({ status: 401, error })
+    if (error === "missing authorization header") {
+      next({ status: 401, error });
     }
-    next(error)
+    next(error);
+  }
+};
+/** Roles bisa berupa string atau array */
+const roleCheck = (roles) => async (req, res, next) => {
+  if (!res.locals.auth) {
+    next({ status: 401, error });
+  }
+  roles = Array.isArray(roles) ? roles : [roles];
+  try {
+    const pengguna = await Pengguna.findById(res.locals.auth);
+    let benar = false;
+    if (pengguna.roles) {
+      for (const role of roles) {
+        if (pengguna.roles.includes(role)) {
+          benar = true;
+          break;
+        }
+      }
+    }
+    if (!benar) {
+      next({ status: 403, error: `Mismatch role ${roles}` });
+    }
+    next();
+  } catch (error) {
+    next(error);
   }
 };
 module.exports = {
   verify,
+  roleCheck,
 };

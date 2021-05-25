@@ -25,16 +25,19 @@ const register = (Pengguna) => async (data) => {
   // pengguna adalah entitas dari model Pengguna
   const pengguna = new Pengguna({
     ...data,
+    listAlamat: [data.alamat],
     password: hashedPassword,
   });
 
   // .save akan menyimpan data ke dalam database
   const penggunaBaru = await pengguna.save();
-
+  penggunaBaru.alamatDefault = penggunaBaru.listAlamat[0]._id;
+  penggunaBaru.lokasiPencetak = penggunaBaru.listAlamat[0]._id;
+  await penggunaBaru.save();
   // generate token untuk pengguna baru tersebut
   const token = createToken(penggunaBaru);
-
-  return token;
+  const profil = await getProfile(pengguna._id);
+  return { ...profil, token };
 };
 const login = (Pengguna) => async (data) => {
   const pengguna = await Pengguna.findOne(
@@ -48,9 +51,13 @@ const login = (Pengguna) => async (data) => {
   if (!match) {
     return Promise.reject("Wrong email or password");
   }
-  return createToken(pengguna);
+  const profil = await getProfile(pengguna._id);
+  return { ...profil, token: createToken(pengguna) };
 };
-
+const getProfile = (Pengguna) => async (idPengguna) => {
+  const pengguna = await Pengguna.findById(idPengguna, "-password").exec();
+  return pengguna;
+};
 module.exports = (model) => ({
   register: register(model),
   login: login(model),
