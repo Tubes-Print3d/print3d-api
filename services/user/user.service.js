@@ -25,12 +25,15 @@ const register = (Pengguna) => async (data) => {
   // pengguna adalah entitas dari model Pengguna
   const pengguna = new Pengguna({
     ...data,
+    listAlamat: [data.alamat],
     password: hashedPassword,
   });
 
   // .save akan menyimpan data ke dalam database
   const penggunaBaru = await pengguna.save();
-
+  penggunaBaru.alamatDefault = penggunaBaru.listAlamat[0]._id;
+  penggunaBaru.lokasiPencetak = penggunaBaru.listAlamat[0]._id;
+  await penggunaBaru.save();
   // generate token untuk pengguna baru tersebut
   const token = createToken(penggunaBaru);
   const profil = await getProfile(pengguna._id);

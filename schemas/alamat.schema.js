@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const PoinSchema = require("./poin.schemas")
+const PoinSchema = require("./poin.schemas");
 
 const AlamatSchema = mongoose.Schema({
   provinsi: { type: String, required: true },

@@ -10,7 +10,7 @@ const MaterialSchema = mongoose.Schema({
 });
 const PencetakSchema = mongoose.Schema(
   {
-    alamat: {
+    lokasiPencetak: {
       type: AlamatSchema,
       required: true,
     },
@@ -19,4 +19,4 @@ const PencetakSchema = mongoose.Schema(
   options
 );
 
-module.exports = Pengguna.discriminator("Pencetak", PencetakSchema, MaterialSchema);
+module.exports = Pengguna.discriminator("Pencetak", PencetakSchema);
