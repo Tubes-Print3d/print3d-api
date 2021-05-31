@@ -12,7 +12,20 @@ const listProduct = async (req, res) => {
   responser(res, payload);
 };
 
+const editProduct = async (req, res) => {
+  const body = req.body;
+  const payload = await service.editProduct(req.params.id, body);
+  responser(res, payload, 200);
+};
+
+const deleteProduct = async (req, res) => {
+  const payload = await service.deleteProduct(req.params.id);
+  responser(res, payload, 200);
+};
+
 module.exports = {
   addProduct,
   listProduct,
+  editProduct,
+  deleteProduct,
 };

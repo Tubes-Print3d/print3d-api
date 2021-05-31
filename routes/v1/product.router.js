@@ -14,7 +14,19 @@ router.post(
 );
 router.get("/", controller.listProduct);
 router.get("/:id", notImplemented);
-router.put("/:id", notImplemented);
-router.delete("/:id", notImplemented);
+router.put(
+  "/:id",
+  validator.editProduct,
+  auth.verify,
+  auth.roleCheck(["desainer"]),
+  controller.editProduct
+);
+router.delete(
+  "/:id",
+  validator.deleteProduct,
+  auth.verify,
+  auth.roleCheck(["desainer"]),
+  controller.deleteProduct
+);
 
 module.exports = router;
