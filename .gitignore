@@ -1,2 +1,5 @@
 node_modules/
 .env
+
+# ignore test related data
+coverage/
