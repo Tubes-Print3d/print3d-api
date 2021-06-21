@@ -8,10 +8,14 @@ const register = async (req, res) => {
   responser(res, payload, 201);
 };
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
   const body = req.body;
-  const payload = await service.login(body);
-  responser(res, payload);
+  try {
+    const payload = await service.login(body);
+    responser(res, payload);
+  } catch (error) {
+    next({ status: StatusCodes.BAD_REQUEST, msg: error });
+  }
 };
 
 const addRole = async (req, res, next) => {
