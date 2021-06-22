@@ -15,7 +15,6 @@ const register = [
     .withMessage("weak password"),
   body("kontak").optional().isArray(),
   body("roles").custom((roles, { req }) => {
-    const validators = [];
     if (roles.includes("pencetak")) {
       if (!req.body.alamat) throw new Error("Field alamat dibutuhkan");
     }
@@ -41,4 +40,8 @@ const addRole = [
     }),
 ];
 
-module.exports = wrap({ register, login, addRole });
+const addToCart = [
+  body("productId").isMongoId().withMessage("Must be valid MongoID"),
+];
+
+module.exports = wrap({ register, login, addRole, addToCart });

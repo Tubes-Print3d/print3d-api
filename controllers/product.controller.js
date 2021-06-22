@@ -13,9 +13,13 @@ const listProduct = async (req, res) => {
 };
 
 const editProduct = async (req, res) => {
-  const body = req.body;
-  const payload = await service.editProduct(req.params.id, body);
-  responser(res, payload, 200);
+  try {
+    const body = req.body;
+    const payload = await service.editProduct(req.params.id, body);
+    responser(res, payload, 200);
+  } catch (error) {
+    next(error);
+  }
 };
 
 const deleteProduct = async (req, res) => {

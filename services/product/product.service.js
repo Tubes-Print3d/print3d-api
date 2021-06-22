@@ -26,15 +26,27 @@ const deleteProduct = (Produk) => async (id) => {
     return Promise.reject(error);
   }
 };
+
 const listProduct =
   (Produk) =>
   async (queries = {}) => {
     const products = await Produk.find(queries).populate("pemilik", "nama");
     return products;
   };
+
+const getProduct = (Produk) => (id) => {
+  return Produk.findById(id);
+};
+
+const exists = (Produk) => (id) => {
+  return Produk.exists({ _id: id });
+};
+
 module.exports = (model) => ({
   addProduct: addProduct(model),
   listProduct: listProduct(model),
   editProduct: editProduct(model),
   deleteProduct: deleteProduct(model),
+  getProduct: getProduct(model),
+  exists: exists(model),
 });

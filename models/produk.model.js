@@ -8,6 +8,7 @@ const ProdukSchema = mongoose.Schema({
   visibility: { type: Boolean, default: true },
   royalty: { type: Number, default: 0 },
   pemilik: { type: ObjectId, ref: "Pengguna" },
+  deskripsi: { type: String },
 });
 
 module.exports = mongoose.model("Produk", ProdukSchema);

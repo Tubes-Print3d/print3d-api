@@ -53,11 +53,11 @@ const login = (Pengguna) => async (data) => {
     "password _id"
   ).exec();
   if (!pengguna) {
-    return Promise.reject("Wrong email or password");
+    return Promise.reject("Email atau password salah");
   }
   const match = await bcrypt.compare(data.password, pengguna.password);
   if (!match) {
-    return Promise.reject("Wrong email or password");
+    return Promise.reject("Email atau password salah");
   }
   const profil = await getProfile(Pengguna)(pengguna._id);
   return { ...profil, token: createToken(pengguna) };
@@ -82,9 +82,66 @@ const addRole = (Pengguna) => async (id, newRole) => {
   await pengguna.save();
 };
 
-module.exports = (model) => ({
-  register: register(model),
-  login: login(model),
-  getProfile: getProfile(model),
-  addRole: addRole(model),
+const listCarts = (Pengguna, Produk) => async (id) => {
+  const pengguna = await Pengguna.findById(id, "keranjang")
+    .populate("keranjang", "nama pemilik")
+    .exec();
+
+  await Pengguna.populate(pengguna, {
+    path: "keranjang.pemilik",
+    select: "nama",
+  });
+
+  return pengguna.keranjang;
+};
+
+const addToCart = (Pengguna, Produk) => async (idPengguna, idProduk) => {
+  const produk = await Produk.findById(idProduk, "nama pemilik")
+    .populate("pemilik", "nama")
+    .exec();
+
+  if (!produk)
+    return Promise.reject({
+      status: StatusCodes.BAD_REQUEST,
+      error: "Produk tidak valid",
+    });
+
+  const pengguna = await Pengguna.findById(idPengguna, "keranjang");
+
+  if (pengguna.keranjang.includes(idProduk))
+    return Promise.reject({
+      status: StatusCodes.BAD_REQUEST,
+      error: "Produk sudah ada dalam keranjang",
+    });
+
+  pengguna.keranjang.push(idProduk);
+  await pengguna.save();
+
+  return produk;
+};
+
+const removeFromCart = (Pengguna) => async (idPengguna, idProduk) => {
+  const pengguna = await Pengguna.findById(idPengguna, "keranjang");
+
+  const produkIndex = pengguna.keranjang.findIndex((v) => v == idProduk);
+  if (produkIndex === -1)
+    return Promise.reject({
+      status: StatusCodes.NOT_FOUND,
+      error: "Produk tidak ada dalam keranjang",
+    });
+
+  pengguna.keranjang.splice(produkIndex, 1);
+  await pengguna.save();
+
+  return idProduk;
+};
+
+module.exports = (Pengguna, Produk) => ({
+  register: register(Pengguna),
+  login: login(Pengguna),
+  getProfile: getProfile(Pengguna),
+  addRole: addRole(Pengguna),
+  listCarts: listCarts(Pengguna, Produk),
+  addToCart: addToCart(Pengguna, Produk),
+  removeFromCart: removeFromCart(Pengguna),
 });
