@@ -29,8 +29,39 @@ const addRole = async (req, res, next) => {
   }
 };
 
+const listCarts = async (req, res) => {
+  const id = res.locals.auth;
+  const carts = await service.listCarts(id);
+  responser(res, carts, StatusCodes.OK);
+};
+
+const addToCart = async (req, res, next) => {
+  const userId = res.locals.auth;
+  const productId = req.body.productId;
+  try {
+    const newItem = await service.addToCart(userId, productId);
+    responser(res, newItem, StatusCodes.OK);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const removeFromCart = async (req, res, next) => {
+  const { productId } = req.params;
+  const userId = res.locals.auth;
+  try {
+    const deleted = await service.removeFromCart(userId, productId);
+    responser(res, deleted, StatusCodes.OK);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   register,
   login,
   addRole,
+  listCarts,
+  addToCart,
+  removeFromCart,
 };

@@ -7,8 +7,13 @@ const validator = require("../../validators/user.validator");
 
 router.post("/register", validator.register, controller.register);
 router.post("/login", validator.login, controller.login);
-router.get("/:id", notImplemented);
 router.post("/roles", validator.addRole, auth.verify, controller.addRole);
+
+router.get("/carts", auth.verify, controller.listCarts);
+router.post("/carts", auth.verify, validator.addToCart, controller.addToCart);
+router.delete("/carts/:productId", auth.verify, controller.removeFromCart);
+
+router.get("/:id", notImplemented);
 router.put("/:id", notImplemented);
 router.delete("/:id", notImplemented);
 

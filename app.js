@@ -13,13 +13,14 @@ mongoose.connect(mongoCon, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useUnifiedTopology: true,
+  useFindAndModify: true,
 });
 
 const path = require("path");
 const reqdir = require("./utils/async-readdir");
 
 reqdir(path.join(__dirname, "models")).then(() => {
-  const routes = require('./routes');
+  const routes = require("./routes");
 
   app.use("/", routes);
 });

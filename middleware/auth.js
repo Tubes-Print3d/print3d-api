@@ -1,6 +1,8 @@
+const { StatusCodes } = require("http-status-codes");
 const jwt = require("jsonwebtoken");
 const { JWT_KEY } = process.env;
 const Pengguna = require("../models/pengguna/pengguna.model");
+
 const verify = (req, res, next) => {
   try {
     if (!req.headers.authorization) {
@@ -13,8 +15,9 @@ const verify = (req, res, next) => {
   } catch (error) {
     if (error === "missing authorization header") {
       next({ status: 401, error });
-    }
-    next(error);
+    } else if (error.name && error.name === "TokenExpiredError") {
+      next({ status: StatusCodes.UNAUTHORIZED, error });
+    } else next(error);
   }
 };
 /** Roles bisa berupa string atau array */
