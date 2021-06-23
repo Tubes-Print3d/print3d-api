@@ -2,11 +2,6 @@ const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Types;
 const AlamatSchema = require("../../schemas/alamat.schema");
 
-const MaterialSchema = mongoose.Schema({
-  jenis: { type: String, required: true },
-  tersedia: { type: Boolean, required: true, default: true },
-});
-
 const PenggunaSchema = mongoose.Schema({
   nama: { type: String, required: true },
   password: { type: String, required: true },
@@ -28,7 +23,7 @@ const PenggunaSchema = mongoose.Schema({
   lokasiPencetak: {
     type: ObjectId,
   },
-  listMaterial: [{ type: MaterialSchema }],
+  // listMaterial: [{ type: MaterialSchema }],
 });
 
 module.exports = mongoose.model("Pengguna", PenggunaSchema);
